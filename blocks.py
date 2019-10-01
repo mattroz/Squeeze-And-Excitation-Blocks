@@ -14,4 +14,11 @@ class cSE(nn.Module):
         self.relu = nn.ReLU6()
 
     def forward(self, input_tensor):
-        pass
+        x = self.global_avg_pool(input_tensor)
+        x = self.pointwise_1(x)
+        x = self.relu(x)
+        x = self.pointwise_2(x)
+        x = self.sigmoid(x)
+        x = torch.mul(input_tensor, x)
+
+        return x
