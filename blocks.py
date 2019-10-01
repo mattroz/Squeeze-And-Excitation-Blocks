@@ -23,6 +23,7 @@ class cSE(nn.Module):
 
         return x
 
+
 class sSE(nn.Module):
 
     def __init__(self, in_channels):
@@ -37,3 +38,19 @@ class sSE(nn.Module):
         x = torch.mul(input_tensor, x)
 
         return x
+
+
+class scSE(nn.Module):
+
+    def __init__(self, in_channels):
+        super().__init__()
+
+        self.sSE = sSE(in_channels)
+        self.cSE = cSE(in_channels)
+
+    def forward(self, input_tensor):
+        spatial_att_map = self.sSE(input_tensor)
+        channel_att_map = self.cSE(input_tensor)
+        result = torch.add(spatial_att_map, channel_att_map)
+
+        return result
