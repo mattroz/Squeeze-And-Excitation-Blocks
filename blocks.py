@@ -7,9 +7,10 @@ class cSE(nn.Module):
     def __init__(self, in_channels):
         super().__init__()
 
+        reduced_filters = 1 if (in_channels // 2) == 0 else (in_channels // 2)
         self.global_avg_pool = nn.AdaptiveAvgPool2d(output_size=(1,1))
-        self.pointwise_1 = nn.Conv2d(in_channels=in_channels, out_channels=(in_channels // 2), kernel_size=1)
-        self.pointwise_2 = nn.Conv2d(in_channels=(in_channels // 2), out_channels=in_channels, kernel_size=1)
+        self.pointwise_1 = nn.Conv2d(in_channels=in_channels, out_channels=reduced_filters, kernel_size=1)
+        self.pointwise_2 = nn.Conv2d(in_channels=reduced_filters, out_channels=in_channels, kernel_size=1)
         self.sigmoid = nn.Sigmoid()
         self.relu = nn.ReLU6()
 
